@@ -4,6 +4,10 @@ import interfaceGraphique.Terminal;
 
 public class SeaSquare extends Square {
 
+	public SeaSquare(int xPosition, int yPosition) {
+		super(xPosition, yPosition);
+	}
+	
 	@Override
 	public void addVehicleToGroundlevel(Vehicle Vehicle) {
 		if(Vehicle instanceof AircraftCarrier) {

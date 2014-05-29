@@ -20,11 +20,11 @@ public class WorldMap {
 			for (int i=0 ; i<xSize ; ++i) {
 				for (int j=0 ; j<ySize ; ++j) {
 					switch(keysTable[i][j]) {
-						case Wargame.SEA_KEY :
-							squares[i][j] = new SeaSquare();
+						case Game.SEA_KEY :
+							squares[i][j] = new SeaSquare(i,j);
 							break;
-						case Wargame.LAND_KEY :
-							squares[i][j] = new LandSquare();
+						case Game.LAND_KEY :
+							squares[i][j] = new LandSquare(i,j);
 							break;
 						default :
 							throw new RuntimeException();
@@ -35,11 +35,11 @@ public class WorldMap {
 	}
 	
 	public void createSeaSquare(int xPos, int yPos) {
-		squares[xPos][yPos] = new SeaSquare();
+		squares[xPos][yPos] = new SeaSquare(xPos, yPos);
 	}
 	
 	public void createLandSquare(int xPos, int yPos) {
-		squares[xPos][yPos] = new LandSquare();
+		squares[xPos][yPos] = new LandSquare(xPos, yPos);
 	}
 	
 	public void addVehicleToGroundlevel(Vehicle Vehicle, int xPos, int yPos) {

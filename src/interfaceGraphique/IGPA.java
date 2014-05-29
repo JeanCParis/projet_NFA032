@@ -1,7 +1,12 @@
 package interfaceGraphique;
 
 import java.awt.*;
+
 import javax.swing.*;
+
+import wargame.Game;
+import wargame.SquareClickHandler;
+
 import java.util.*;
 
 class SpecialPanel extends JPanel {
@@ -61,6 +66,11 @@ public class IGPA extends JFrame {
 		for (int i = 0; i<je.length; i++){
 		    for (int j=0; j<je[0].length; j++){
 		    	jeu[i][j]=je[i][j];
+		    	Button button = new Button();
+		    	button.addActionListener(new SquareClickHandler());
+		    	button.setBounds(Game.BORDER + i*Game.SQUARE_SIZE, Game.BORDER + j*Game.SQUARE_SIZE, Game.SQUARE_SIZE, Game.SQUARE_SIZE);
+		    	//button.setVisible(false);
+		    	jpane.add(button);
 		    }
 		}
     }

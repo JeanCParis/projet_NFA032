@@ -6,14 +6,21 @@ import java.util.ArrayList;
 
 public abstract class Square { 
 	
+	protected int xPositon, yPosition;
+	
 	protected ArrayList<Vehicle> groundlevelVehicles = new ArrayList<Vehicle>();
 	protected ArrayList<Vehicle> skylevelVehicles = new ArrayList<Vehicle>();
+	
+	protected Square(int xPosition, int yPosition) {
+		this.xPositon = xPosition;
+		this.yPosition = yPosition;
+	}
 	
 	public abstract void addVehicleToGroundlevel(Vehicle Vehicle);
 	
 	public void addVehicleToSkylevel(Vehicle Vehicle) {
 		if(Vehicle instanceof Aircraft) {
-			if(skylevelVehicles.size() < Wargame.MAX_SKYLEVEL_AIRCRAFTS) {
+			if(skylevelVehicles.size() < Game.MAX_SKYLEVEL_AIRCRAFTS) {
 				skylevelVehicles.add(Vehicle);
 			}
 			else {

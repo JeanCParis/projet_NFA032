@@ -17,7 +17,7 @@ public class AircraftCarrier extends Vehicle {
 	}
 	
 	public void addAircraft(Aircraft aircraft) {
-		if(aircrafts.size() < Wargame.MAX_AIRCRAFTS_CARRIER) {
+		if(aircrafts.size() < Game.MAX_AIRCRAFTS_CARRIER) {
 			aircrafts.add(aircraft);
 		}
 		else {
