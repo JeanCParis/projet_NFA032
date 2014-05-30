@@ -9,17 +9,17 @@ public class SeaSquare extends Square {
 	}
 	
 	@Override
-	public void addVehicleToGroundlevel(Vehicle Vehicle) {
-		if(Vehicle instanceof AircraftCarrier) {
+	public void addVehicleToGroundlevel(Vehicle vehicle) throws IncompatibleVehiculeException, FullException {
+		if(vehicle instanceof AircraftCarrier) {
 			if(groundlevelVehicles.isEmpty()) {
-				groundlevelVehicles.add(Vehicle);
+				groundlevelVehicles.add(vehicle);
 			}
 			else {
-				Terminal.ecrireException(new Exception());
+				throw new FullException();
 			}
 		}
 		else {
-			Terminal.ecrireException(new Exception());
+			throw new IncompatibleVehiculeException(vehicle);
 		}
 	}
 }

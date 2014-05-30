@@ -11,7 +11,6 @@ public class Game {
 	public static final int AIRCRAFTS_WATER_KEY = 101;
 	public static final int CARRIER_KEY = 20;
 	
-	
 	public static final int X_MAP_SIZE = 10;
 	public static final int Y_MAP_SIZE = 10;
 	public static final int SQUARE_SIZE = 48;
@@ -60,21 +59,35 @@ public class Game {
 	
 	public void playerInitialisation() {
 		Terminal.ecrireStringln("Welcome to Wargame !");
-		Terminal.sautDeLigne();
-		
-		Terminal.ecrireString("Please enter your army's name : ");
+		Terminal.ecrireString("General, please enter your army's name : ");
 		String name = Terminal.lireString();
 		army = new Army(name);
+		
+		Terminal.sautDeLigne();
+		Terminal.ecrireStringln("General, please select the square on which you wish to put your aircraft carrier.");
+		currentGameState = GameState.START;
 	}
 	
-	public void squareClicked() {
+	public void squareClicked(int xPosition, int yPosition) {
 		switch (currentGameState) {
-		case INITIALIZATION:
-			igpa.modifierCase(9, 9, AIRCRAFT_LAND_KEY);
-			igpa.reafficher();
+		case START:
+			try {
+				Vehicle carrier = new AircraftCarrier(xPosition, yPosition);
+				map.addVehicleToGroundlevel(carrier, xPosition, yPosition);
+				igpa.modifierCase(xPosition, yPosition, CARRIER_KEY);
+				igpa.reafficher();
+				Terminal.ecrireStringln("General, you have placed your vehicle on position (" + xPosition + "," + yPosition + ").");
+				Terminal.ecrireStringln("General, you can now select a vehicle to move on the worldmap");
+				currentGameState = GameState.INGAME;
+			} catch(IncompatibleVehiculeException e) {
+				Terminal.ecrireStringln("General, the vehicle type " + e.getVehicle().toString() + " is incompatible with the selected square.");
+				Terminal.ecrireStringln("General, please select another one.");
+			} catch(FullException e) {
+				Terminal.ecrireStringln("General, the selected square is already occupied, please select another one.");
+			}
 			break;
 		case INGAME:
-			//
+			
 			break;
 		}
 	}

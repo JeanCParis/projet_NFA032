@@ -12,6 +12,7 @@ public class SquareClickHandler implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		game.squareClicked();
+		SquareButton button = (SquareButton)e.getSource();
+		game.squareClicked(button.getXPosition(), button.getYPosition());
 	}
 }

@@ -16,33 +16,28 @@ public abstract class Square {
 		this.yPosition = yPosition;
 	}
 	
-	public abstract void addVehicleToGroundlevel(Vehicle Vehicle);
+	public abstract void addVehicleToGroundlevel(Vehicle vehicle) throws IncompatibleVehiculeException, FullException;
 	
-	public void addVehicleToSkylevel(Vehicle Vehicle) {
-		if(Vehicle instanceof Aircraft) {
+	public void addVehicleToSkylevel(Vehicle vehicle) throws IncompatibleVehiculeException, FullException {
+		if(vehicle instanceof Aircraft) {
 			if(skylevelVehicles.size() < Game.MAX_SKYLEVEL_AIRCRAFTS) {
-				skylevelVehicles.add(Vehicle);
+				skylevelVehicles.add(vehicle);
 			}
 			else {
-				Terminal.ecrireException(new Exception());
+				throw new FullException();
 			}
 		}
-	}
-	
-	public void removeVehicleFromGroundlevel(Vehicle Vehicle) {
-		try {
-			groundlevelVehicles.remove(Vehicle);
-		} catch(Exception e){
-			Terminal.ecrireException(new Exception());
+		else {
+			throw new IncompatibleVehiculeException(vehicle);
 		}
 	}
 	
-	public void removeVehicleFromSkylevel(Vehicle Vehicle) {
-		try {
-			skylevelVehicles.remove(Vehicle);
-		} catch(Exception e){
-			Terminal.ecrireException(new Exception());
-		}
+	public void removeVehicleFromGroundlevel(Vehicle vehicle) {
+		groundlevelVehicles.remove(vehicle);
+	}
+	
+	public void removeVehicleFromSkylevel(Vehicle vehicle) {
+		skylevelVehicles.remove(vehicle);
 	}
 	
 	public ArrayList<Vehicle> getGroundlevelVehicles() {

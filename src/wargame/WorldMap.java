@@ -42,11 +42,11 @@ public class WorldMap {
 		squares[xPos][yPos] = new LandSquare(xPos, yPos);
 	}
 	
-	public void addVehicleToGroundlevel(Vehicle Vehicle, int xPos, int yPos) {
+	public void addVehicleToGroundlevel(Vehicle Vehicle, int xPos, int yPos) throws IncompatibleVehiculeException, FullException {
 		squares[xPos][yPos].addVehicleToGroundlevel(Vehicle);
 	}
 	
-	public void addVehicleToSkylevel(Vehicle Vehicle, int xPos, int yPos) {
+	public void addVehicleToSkylevel(Vehicle Vehicle, int xPos, int yPos) throws IncompatibleVehiculeException, FullException {
 		squares[xPos][yPos].addVehicleToSkylevel(Vehicle);
 	}
 	

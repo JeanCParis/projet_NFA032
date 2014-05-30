@@ -32,4 +32,9 @@ public class AircraftCarrier extends Vehicle {
 			Terminal.ecrireException(new Exception());
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "Aircraft Carrier";
+	}
 }

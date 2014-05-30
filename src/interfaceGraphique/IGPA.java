@@ -6,6 +6,7 @@ import javax.swing.*;
 
 import wargame.Game;
 import wargame.SquareClickHandler;
+import wargame.SquareButton;
 
 import java.util.*;
 
@@ -29,7 +30,6 @@ class SpecialPanel extends JPanel {
 			    for (int j=0; j<jeu[0].length; j++){
 					g.drawString(""+j,7,j*48+48);
 					g.drawString(""+j,jeu.length*48+30,j*48+48);
-					images.get(jeu[i][j]).paintIcon(this,g,i*48+24,j*48+24);
 			    }
 		}
     }
@@ -37,22 +37,24 @@ class SpecialPanel extends JPanel {
 
 public class IGPA extends JFrame {
     private int[][] jeu;
+    private JButton[][] buttons;
     private HashMap<Integer,ImageIcon>  images;
     private SpecialPanel jpane;
     
     public IGPA(int x, int y) {
 		jeu = new int[x][y];
+		buttons = new JButton[x][y];
 		images = new  HashMap<Integer,ImageIcon>();
     }
     
     public void creerFenetre(){
 		if (! this.isVisible()){
-		    this.setTitle("Terrain");
+		    this.setTitle("Wargame");
 		    this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		    jpane = new SpecialPanel(jeu, images);
 		    this.setContentPane(jpane);
-		    jpane.setPreferredSize(new Dimension(jeu.length*48+48,
-							 jeu[0].length*48+48));
+		    jpane.setPreferredSize(new Dimension(jeu.length*Game.SQUARE_SIZE+48,
+							 jeu[0].length*Game.SQUARE_SIZE+48));
 		    jpane.setBackground(Color.black);
 		    this.pack();
 		    this.setVisible(true);
@@ -66,13 +68,16 @@ public class IGPA extends JFrame {
 		for (int i = 0; i<je.length; i++){
 		    for (int j=0; j<je[0].length; j++){
 		    	jeu[i][j]=je[i][j];
-		    	Button button = new Button();
+		    	JButton button = new SquareButton(i, j);
 		    	button.addActionListener(new SquareClickHandler());
 		    	button.setBounds(Game.BORDER + i*Game.SQUARE_SIZE, Game.BORDER + j*Game.SQUARE_SIZE, Game.SQUARE_SIZE, Game.SQUARE_SIZE);
-		    	//button.setVisible(false);
+		    	button.setIcon(images.get(jeu[i][j]));
+		    	button.setVisible(true);
+		    	buttons[i][j]=button;
 		    	jpane.add(button);
 		    }
 		}
+		reafficher();
     }
     
     public void declarerImage(int c, String s){
@@ -81,8 +86,9 @@ public class IGPA extends JFrame {
     
     public void modifierCase(int x, int y, int val){
     	jeu[x][y]=val;
+    	buttons[x][y].setIcon(images.get(val));
     }
-    
+   
     public void reafficher(){
     	jpane.repaint();
     }

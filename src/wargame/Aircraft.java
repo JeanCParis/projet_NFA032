@@ -5,4 +5,9 @@ public class Aircraft extends Vehicle {
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
 	}
+	
+	@Override
+	public String toString() {
+		return "Aircraft";
+	}
 }

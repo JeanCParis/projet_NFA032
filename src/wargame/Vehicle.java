@@ -18,4 +18,6 @@ public abstract class Vehicle {
 	public void setYPosition(int yPosition) {
 		this.yPosition = yPosition;
 	}
+	
+	public abstract String toString();
 }

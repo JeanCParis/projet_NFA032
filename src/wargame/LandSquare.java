@@ -9,7 +9,7 @@ public class LandSquare extends Square {
 	}
 	
 	@Override
-	public void addVehicleToGroundlevel(Vehicle Vehicle) {
-		Terminal.ecrireException(new Exception());
+	public void addVehicleToGroundlevel(Vehicle vehicle) throws IncompatibleVehiculeException, FullException{
+		throw new IncompatibleVehiculeException(vehicle);
 	}
 }
