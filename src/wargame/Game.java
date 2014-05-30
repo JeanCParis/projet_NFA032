@@ -62,8 +62,6 @@ public class Game {
 		Terminal.ecrireString("General, please enter your army's name : ");
 		String name = Terminal.lireString();
 		army = new Army(name);
-		
-		Terminal.sautDeLigne();
 		Terminal.ecrireStringln("General, please select the square on which you wish to put your aircraft carrier.");
 		currentGameState = GameState.START;
 	}
@@ -77,8 +75,8 @@ public class Game {
 				igpa.modifierCase(xPosition, yPosition, CARRIER_KEY);
 				igpa.reafficher();
 				Terminal.ecrireStringln("General, you have placed your vehicle on position (" + xPosition + "," + yPosition + ").");
-				Terminal.ecrireStringln("General, you can now select a vehicle to move on the worldmap");
-				currentGameState = GameState.INGAME;
+				Terminal.ecrireStringln("General, you can now select a vehicle to move on the worldmap.");
+				currentGameState = GameState.INGAME_SELECTING_VEHICLE;
 			} catch(IncompatibleVehiculeException e) {
 				Terminal.ecrireStringln("General, the vehicle type " + e.getVehicle().toString() + " is incompatible with the selected square.");
 				Terminal.ecrireStringln("General, please select another one.");
@@ -86,8 +84,8 @@ public class Game {
 				Terminal.ecrireStringln("General, the selected square is already occupied, please select another one.");
 			}
 			break;
-		case INGAME:
-			
+		case INGAME_SELECTING_VEHICLE:
+				
 			break;
 		}
 	}

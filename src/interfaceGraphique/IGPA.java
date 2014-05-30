@@ -37,13 +37,14 @@ class SpecialPanel extends JPanel {
 
 public class IGPA extends JFrame {
     private int[][] jeu;
-    private JButton[][] buttons;
+    private JButton[][] squares;
+    private JButton[] vehicleChoices;
     private HashMap<Integer,ImageIcon>  images;
     private SpecialPanel jpane;
     
     public IGPA(int x, int y) {
 		jeu = new int[x][y];
-		buttons = new JButton[x][y];
+		squares = new JButton[x][y];
 		images = new  HashMap<Integer,ImageIcon>();
     }
     
@@ -53,9 +54,10 @@ public class IGPA extends JFrame {
 		    this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		    jpane = new SpecialPanel(jeu, images);
 		    this.setContentPane(jpane);
-		    jpane.setPreferredSize(new Dimension(jeu.length*Game.SQUARE_SIZE+48,
+		    jpane.setPreferredSize(new Dimension(jeu.length*Game.SQUARE_SIZE+148,
 							 jeu[0].length*Game.SQUARE_SIZE+48));
 		    jpane.setBackground(Color.black);
+		    jpane.setLayout(null);
 		    this.pack();
 		    this.setVisible(true);
 		}
@@ -73,7 +75,7 @@ public class IGPA extends JFrame {
 		    	button.setBounds(Game.BORDER + i*Game.SQUARE_SIZE, Game.BORDER + j*Game.SQUARE_SIZE, Game.SQUARE_SIZE, Game.SQUARE_SIZE);
 		    	button.setIcon(images.get(jeu[i][j]));
 		    	button.setVisible(true);
-		    	buttons[i][j]=button;
+		    	squares[i][j]=button;
 		    	jpane.add(button);
 		    }
 		}
@@ -86,7 +88,7 @@ public class IGPA extends JFrame {
     
     public void modifierCase(int x, int y, int val){
     	jeu[x][y]=val;
-    	buttons[x][y].setIcon(images.get(val));
+    	squares[x][y].setIcon(images.get(val));
     }
    
     public void reafficher(){
