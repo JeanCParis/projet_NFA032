@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public abstract class Square { 
 	
-	protected int xPositon, yPosition;
+	protected final int xPositon, yPosition;
 	
 	protected ArrayList<Vehicle> groundlevelVehicles = new ArrayList<Vehicle>();
 	protected ArrayList<Vehicle> skylevelVehicles = new ArrayList<Vehicle>();

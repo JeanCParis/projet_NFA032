@@ -34,35 +34,35 @@ public class WorldMap {
 		}
 	}
 	
-	public void createSeaSquare(int xPos, int yPos) {
-		squares[xPos][yPos] = new SeaSquare(xPos, yPos);
+	public void createSeaSquare(int xPosition, int yPosition) {
+		squares[xPosition][yPosition] = new SeaSquare(xPosition, yPosition);
 	}
 	
-	public void createLandSquare(int xPos, int yPos) {
-		squares[xPos][yPos] = new LandSquare(xPos, yPos);
+	public void createLandSquare(int xPosition, int yPosition) {
+		squares[xPosition][yPosition] = new LandSquare(xPosition, yPosition);
 	}
 	
-	public void addVehicleToGroundlevel(Vehicle Vehicle, int xPos, int yPos) throws IncompatibleVehiculeException, FullException {
-		squares[xPos][yPos].addVehicleToGroundlevel(Vehicle);
+	public void addVehicleToGroundlevel(Vehicle Vehicle, int xPosition, int yPosition) throws IncompatibleVehiculeException, FullException {
+		squares[xPosition][yPosition].addVehicleToGroundlevel(Vehicle);
 	}
 	
-	public void addVehicleToSkylevel(Vehicle Vehicle, int xPos, int yPos) throws IncompatibleVehiculeException, FullException {
-		squares[xPos][yPos].addVehicleToSkylevel(Vehicle);
+	public void addVehicleToSkylevel(Vehicle Vehicle, int xPosition, int yPosition) throws IncompatibleVehiculeException, FullException {
+		squares[xPosition][yPosition].addVehicleToSkylevel(Vehicle);
 	}
 	
-	public void removeVehicleFromGroundlevel(Vehicle Vehicle, int xPos, int yPos) {
-		squares[xPos][yPos].removeVehicleFromGroundlevel(Vehicle);
+	public void removeVehicleFromGroundlevel(Vehicle Vehicle, int xPosition, int yPosition) {
+		squares[xPosition][yPosition].removeVehicleFromGroundlevel(Vehicle);
 	}
 	
-	public void removeVehicleFromSkylevel(Vehicle Vehicle, int xPos, int yPos) {
-		squares[xPos][yPos].removeVehicleFromSkylevel(Vehicle);
+	public void removeVehicleFromSkylevel(Vehicle Vehicle, int xPosition, int yPosition) {
+		squares[xPosition][yPosition].removeVehicleFromSkylevel(Vehicle);
 	}
 	
-	public ArrayList<Vehicle> getGroundlevelVehicules(int xPos, int yPos) {
-		return squares[xPos][yPos].getGroundlevelVehicles();
+	public ArrayList<Vehicle> getGroundlevelVehicules(int xPosition, int yPosition) {
+		return squares[xPosition][yPosition].getGroundlevelVehicles();
 	}
 	
-	public ArrayList<Vehicle> getSkylevelVehicules(int xPos, int yPos) {
-		return squares[xPos][yPos].getSkylevelVehicles();
+	public ArrayList<Vehicle> getSkylevelVehicules(int xPosition, int yPosition) {
+		return squares[xPosition][yPosition].getSkylevelVehicles();
 	}
 }

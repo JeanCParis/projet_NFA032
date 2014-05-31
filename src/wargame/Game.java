@@ -1,5 +1,7 @@
 package wargame;
 
+import java.util.List;
+
 import interfaceGraphique.*;
 
 public class Game {
@@ -28,6 +30,7 @@ public class Game {
 	public void gameInitialisation() {
 		
 		SquareClickHandler.setGame(this);
+		TerminalInputHandler.setGame(this);
 		
 		igpa = new IGPA(X_MAP_SIZE, Y_MAP_SIZE);
 		igpa.creerFenetre();
@@ -58,12 +61,9 @@ public class Game {
 	}
 	
 	public void playerInitialisation() {
-		Terminal.ecrireStringln("Welcome to Wargame !");
-		Terminal.ecrireString("General, please enter your army's name : ");
-		String name = Terminal.lireString();
-		army = new Army(name);
-		Terminal.ecrireStringln("General, please select the square on which you wish to put your aircraft carrier.");
-		currentGameState = GameState.START;
+		igpa.writeOnTerminalln("Welcome to Wargame !");
+		igpa.writeOnTerminal("General, please enter your army's name : ");
+		igpa.enableInputFromTerminal();
 	}
 	
 	public void squareClicked(int xPosition, int yPosition) {
@@ -74,19 +74,37 @@ public class Game {
 				map.addVehicleToGroundlevel(carrier, xPosition, yPosition);
 				igpa.modifierCase(xPosition, yPosition, CARRIER_KEY);
 				igpa.reafficher();
-				Terminal.ecrireStringln("General, you have placed your vehicle on position (" + xPosition + "," + yPosition + ").");
-				Terminal.ecrireStringln("General, you can now select a vehicle to move on the worldmap.");
+				igpa.writeOnTerminalln("General, you have placed your vehicle on position (" + xPosition + "," + yPosition + ").");
+				igpa.writeOnTerminalln("General, you can now select a vehicle to move on the worldmap.");
 				currentGameState = GameState.INGAME_SELECTING_VEHICLE;
 			} catch(IncompatibleVehiculeException e) {
-				Terminal.ecrireStringln("General, the vehicle type " + e.getVehicle().toString() + " is incompatible with the selected square.");
-				Terminal.ecrireStringln("General, please select another one.");
+				igpa.writeOnTerminalln("General, the vehicle type " + e.getVehicle().toString() + " is incompatible with the selected square.");
+				igpa.writeOnTerminalln("General, please select another one.");
 			} catch(FullException e) {
-				Terminal.ecrireStringln("General, the selected square is already occupied, please select another one.");
+				igpa.writeOnTerminalln("General, the selected square is already occupied, please select another one.");
 			}
 			break;
 		case INGAME_SELECTING_VEHICLE:
-				
+				List<Vehicle> groundVehicles, airVehicles;
+				groundVehicles = map.getGroundlevelVehicules(xPosition, yPosition);
+				airVehicles = map.getSkylevelVehicules(xPosition, yPosition);
+				if (groundVehicles.isEmpty() && airVehicles.isEmpty())
+				{
+					igpa.writeOnTerminalln("General, the selected square is not occupied by any vehicle.");
+				}	
 			break;
+		}
+	}
+	
+	public void inputRead(String string) {
+		switch (currentGameState) {
+			case INITIALIZATION:
+				igpa.disableInputFromTerminal();
+				igpa.writeOnTerminalln(" " + string);
+				army = new Army(string);
+				igpa.writeOnTerminalln("General, please select the square on which you wish to put your aircraft carrier.");
+				currentGameState = GameState.START;
+				break;
 		}
 	}
 	
