@@ -31,6 +31,12 @@ public class Game {
 		
 		SquareClickHandler.setGame(this);
 		TerminalInputHandler.setGame(this);
+		VehicleClickHandler.setGame(this);
+		
+		Aircraft.setType(VehicleType.AIRCRAFT);
+		AircraftCarrier.setType(VehicleType.AIRCRAFT_CARRIER);
+		LandSquare.setType(SquareType.LAND);
+		SeaSquare.setType(SquareType.SEA);
 		
 		igpa = new IGPA(X_MAP_SIZE, Y_MAP_SIZE);
 		igpa.creerFenetre();
@@ -70,7 +76,11 @@ public class Game {
 		switch (currentGameState) {
 		case START:
 			try {
-				Vehicle carrier = new AircraftCarrier(xPosition, yPosition);
+				AircraftCarrier carrier = new AircraftCarrier(xPosition, yPosition);
+				for (int i=0 ; i<MAX_AIRCRAFTS_CARRIER ; ++i) {
+					carrier.addAircraft(new Aircraft(xPosition, yPosition));
+				}
+				army.addVehicle(carrier);
 				map.addVehicleToGroundlevel(carrier, xPosition, yPosition);
 				igpa.modifierCase(xPosition, yPosition, CARRIER_KEY);
 				igpa.reafficher();
@@ -85,15 +95,48 @@ public class Game {
 			}
 			break;
 		case INGAME_SELECTING_VEHICLE:
-				List<Vehicle> groundVehicles, airVehicles;
+				List<Vehicle> groundVehicles, skyVehicles;
 				groundVehicles = map.getGroundlevelVehicules(xPosition, yPosition);
-				airVehicles = map.getSkylevelVehicules(xPosition, yPosition);
-				if (groundVehicles.isEmpty() && airVehicles.isEmpty())
+				skyVehicles = map.getSkylevelVehicules(xPosition, yPosition);
+				if (groundVehicles.isEmpty() && skyVehicles.isEmpty())
 				{
 					igpa.writeOnTerminalln("General, the selected square is not occupied by any vehicle.");
-				}	
-			break;
-		}
+				}
+				else {
+					currentGameState = GameState.INGAME_SELECTING_VEHICLE_SELECTED;
+					switch(map.getType(xPosition, yPosition)) {
+					case LAND :
+						for(Vehicle vehicle : groundVehicles) {
+							switch(vehicle.getType()) {
+							case AIRCRAFT :
+								igpa.addRightVehicleChoice(AIRCRAFT_LAND_KEY);
+								break;
+							}
+						}
+						break;
+					case SEA :
+						for(Vehicle vehicle : groundVehicles) {
+							switch(vehicle.getType()) {
+							case AIRCRAFT :
+								igpa.addRightVehicleChoice(AIRCRAFT_WATER_KEY);
+								break;
+							case AIRCRAFT_CARRIER :
+								igpa.addLeftVehicleChoice(CARRIER_KEY);
+								AircraftCarrier carrier = (AircraftCarrier)vehicle;
+								for(Vehicle subvehicle : carrier.getAircrafts()) {
+									igpa.addLeftVehicleChoice(AIRCRAFT_WATER_KEY);
+								}
+								break;
+							}
+						}
+						break;
+					}
+				}
+		}				
+	}
+	
+	public void vehicleClicked() {
+		//todo
 	}
 	
 	public void inputRead(String string) {
@@ -102,6 +145,7 @@ public class Game {
 				igpa.disableInputFromTerminal();
 				igpa.writeOnTerminalln(" " + string);
 				army = new Army(string);
+				
 				igpa.writeOnTerminalln("General, please select the square on which you wish to put your aircraft carrier.");
 				currentGameState = GameState.START;
 				break;

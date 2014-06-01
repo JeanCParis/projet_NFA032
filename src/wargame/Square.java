@@ -5,7 +5,7 @@ import interfaceGraphique.Terminal;
 import java.util.ArrayList;
 
 public abstract class Square { 
-	
+	protected static SquareType type;
 	protected final int xPositon, yPosition;
 	
 	protected ArrayList<Vehicle> groundlevelVehicles = new ArrayList<Vehicle>();
@@ -16,6 +16,16 @@ public abstract class Square {
 		this.yPosition = yPosition;
 	}
 	
+	public static SquareType getType() {
+		return type;
+	}
+
+
+	public static void setType(SquareType type) {
+		Square.type = type;
+	}
+
+
 	public abstract void addVehicleToGroundlevel(Vehicle vehicle) throws IncompatibleVehiculeException, FullException;
 	
 	public void addVehicleToSkylevel(Vehicle vehicle) throws IncompatibleVehiculeException, FullException {

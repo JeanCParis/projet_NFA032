@@ -1,6 +1,9 @@
 package wargame;
 
 public class Aircraft extends Vehicle {
+	public Aircraft() {
+	}
+	
 	public Aircraft(int xPosition, int yPosition) {
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;

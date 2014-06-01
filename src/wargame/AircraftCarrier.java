@@ -7,6 +7,9 @@ import java.util.ArrayList;
 public class AircraftCarrier extends Vehicle {
 	ArrayList<Aircraft> aircrafts = new ArrayList<Aircraft>();
 	
+	public AircraftCarrier() {
+	}
+	
 	public AircraftCarrier(int xPosition, int yPosition) {
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;

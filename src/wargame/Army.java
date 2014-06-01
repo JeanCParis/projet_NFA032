@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Army {
 	protected String name;
-	protected ArrayList<Vehicle> vehicles;
+	protected ArrayList<Vehicle> vehicles = new ArrayList<Vehicle>();
 	
 	public Army(String name) {
 		this.name = name;

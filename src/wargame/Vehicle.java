@@ -1,6 +1,7 @@
 package wargame;
 
 public abstract class Vehicle {
+	protected static VehicleType type;
 	protected int xPosition, yPosition;
 	
 	public int getXPosition() {
@@ -19,5 +20,13 @@ public abstract class Vehicle {
 		this.yPosition = yPosition;
 	}
 	
+	public static VehicleType getType() {
+		return type;
+	}
+
+	public static void setType(VehicleType type) {
+		Vehicle.type = type;
+	}
+
 	public abstract String toString();
 }

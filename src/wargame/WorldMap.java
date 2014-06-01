@@ -34,6 +34,10 @@ public class WorldMap {
 		}
 	}
 	
+	public SquareType getType(int xPosition, int yPosition) {
+		return squares[xPosition][yPosition].getType();
+	}
+	
 	public void createSeaSquare(int xPosition, int yPosition) {
 		squares[xPosition][yPosition] = new SeaSquare(xPosition, yPosition);
 	}

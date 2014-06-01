@@ -1,6 +1,7 @@
 package interfaceGraphique;
 
 import java.awt.*;
+import java.awt.List;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
@@ -9,6 +10,7 @@ import wargame.Game;
 import wargame.SquareClickHandler;
 import wargame.SquareButton;
 import wargame.TerminalInputHandler;
+import wargame.VehicleClickHandler;
 
 import java.util.*;
 
@@ -40,8 +42,8 @@ class SpecialPanel extends JPanel {
 public class IGPA extends JFrame {
     private int[][] jeu;
     private JButton[][] squares;
-    private JButton[] groundVehicleChoices;
-    private JButton[] skyVehicleChoices;
+    private ArrayList<JButton> leftVehicleChoices;
+    private  ArrayList<JButton> rightVehicleChoices;
     private JScrollPane outputTerminalScrollPane; 
     private JTextArea outputTerminal;
     private JTextField inputTerminal;
@@ -51,8 +53,8 @@ public class IGPA extends JFrame {
     public IGPA(int x, int y) {
 		jeu = new int[x][y];
 		squares = new JButton[x][y];
-		groundVehicleChoices = new JButton[4];//temp
-		skyVehicleChoices = new JButton[4];//temp
+		leftVehicleChoices = new  ArrayList<JButton>();
+		rightVehicleChoices = new  ArrayList<JButton>();
 		outputTerminal = new JTextArea();
 		outputTerminalScrollPane = new JScrollPane(outputTerminal);
 		inputTerminal = new JTextField();
@@ -100,12 +102,11 @@ public class IGPA extends JFrame {
 		    	button.addActionListener(new SquareClickHandler());
 		    	button.setBounds(Game.BORDER + i*Game.SQUARE_SIZE, Game.BORDER + j*Game.SQUARE_SIZE, Game.SQUARE_SIZE, Game.SQUARE_SIZE);
 		    	button.setIcon(images.get(jeu[i][j]));
-		    	button.setVisible(true);
 		    	squares[i][j]=button;
 		    	jpane.add(button);
 		    }
 		}
-		reafficher();
+		jpane.repaint();
     }
     
     public void declarerImage(int c, String s){
@@ -115,6 +116,14 @@ public class IGPA extends JFrame {
     public void modifierCase(int x, int y, int val){
     	jeu[x][y]=val;
     	squares[x][y].setIcon(images.get(val));
+    }
+    
+    public void reafficher(){
+    	jpane.repaint();
+    }
+    
+    public void fermer(){
+    	this.dispose();
     }
     
     public void writeOnTerminal(String string) {
@@ -133,13 +142,35 @@ public class IGPA extends JFrame {
     	inputTerminal.setText("");
     	inputTerminal.setEditable(false);
     }
-   
-    public void reafficher(){
-    	jpane.repaint();
+    
+    public void clearVehicleChoices() {
+    	for(JButton button : leftVehicleChoices) {
+    		jpane.remove(button);
+    	}
+    	leftVehicleChoices = new ArrayList<JButton>();
+    	
+    	for(JButton button : rightVehicleChoices) {
+    		jpane.remove(button);
+    	}
+    	rightVehicleChoices = new ArrayList<JButton>();
     }
     
-    public void fermer(){
-    	this.dispose();
+    public void addLeftVehicleChoice(int val) {
+    	JButton button = new JButton(images.get(val));
+    	button.setBounds(squares[9][0].getX() + Game.SQUARE_SIZE + 30, squares[9][0].getY() + leftVehicleChoices.size() * Game.SQUARE_SIZE, Game.SQUARE_SIZE, Game.SQUARE_SIZE);
+    	button.addActionListener(new VehicleClickHandler());
+    	jpane.add(button);
+    	jpane.repaint();
+    	leftVehicleChoices.add(button);
+    }
+    
+    public void addRightVehicleChoice(int val) {
+    	JButton button = new JButton(images.get(val));
+    	button.setBounds(squares[9][0].getX() + 2*Game.SQUARE_SIZE + 50, squares[9][0].getY() + rightVehicleChoices.size() * Game.SQUARE_SIZE, Game.SQUARE_SIZE, Game.SQUARE_SIZE);
+    	button.addActionListener(new VehicleClickHandler());
+    	jpane.add(button);
+    	jpane.repaint();
+    	rightVehicleChoices.add(button);
     }
 }
 
