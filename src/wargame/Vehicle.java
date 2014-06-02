@@ -3,30 +3,35 @@ package wargame;
 public abstract class Vehicle {
 	protected static VehicleType type;
 	protected int xPosition, yPosition;
-	
+	protected LevelType level;
+
 	public int getXPosition() {
 		return xPosition;
 	}
-	
+
 	public int getYPosition() {
 		return yPosition;
 	}
-	
-	public void setXPosition(int xPosition) {
+
+	public void moveToPosition(final int xPosition, final int yPosition,
+			final LevelType level) {
 		this.xPosition = xPosition;
-	}
-	
-	public void setYPosition(int yPosition) {
 		this.yPosition = yPosition;
+		this.level = level;
 	}
-	
+
 	public static VehicleType getType() {
 		return type;
 	}
 
-	public static void setType(VehicleType type) {
+	public LevelType getLevel() {
+		return level;
+	}
+
+	public static void setType(final VehicleType type) {
 		Vehicle.type = type;
 	}
 
+	@Override
 	public abstract String toString();
 }

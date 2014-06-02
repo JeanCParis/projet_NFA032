@@ -6,33 +6,33 @@ import java.util.ArrayList;
 
 public class AircraftCarrier extends Vehicle {
 	ArrayList<Aircraft> aircrafts = new ArrayList<Aircraft>();
-	
-	public AircraftCarrier() {
-	}
-	
-	public AircraftCarrier(int xPosition, int yPosition) {
-		this.xPosition = xPosition;
-		this.yPosition = yPosition;
-	}
-	
+
 	public ArrayList<Aircraft> getAircrafts() {
 		return aircrafts;
 	}
-	
-	public void addAircraft(Aircraft aircraft) {
-		if(aircrafts.size() < Game.MAX_AIRCRAFTS_CARRIER) {
+
+	public void addAircraft(final Aircraft aircraft) {
+		if (aircrafts.size() < Game.MAX_AIRCRAFTS_CARRIER) {
 			aircrafts.add(aircraft);
-		}
-		else {
+		} else {
 			throw new RuntimeException();
 		}
 	}
-	
-	public void removeAircraft(Aircraft aircraft) {
+
+	public void removeAircraft(final Aircraft aircraft) {
 		try {
 			aircrafts.remove(aircraft);
-		} catch(Exception e){
+		} catch (final Exception e) {
 			Terminal.ecrireException(new Exception());
+		}
+	}
+
+	@Override
+	public void moveToPosition(final int xPosition, final int yPosition,
+			final LevelType level) {
+		super.moveToPosition(xPosition, yPosition, level);
+		for (final Aircraft aircraft : aircrafts) {
+			aircraft.moveToPosition(xPosition, yPosition, level);
 		}
 	}
 

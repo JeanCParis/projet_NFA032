@@ -5,14 +5,18 @@ import java.awt.event.ActionListener;
 
 public class SquareClickHandler implements ActionListener {
 	protected static Game game;
-	
-	public static void setGame(Game thisGame) {
+	protected Square square;
+
+	public SquareClickHandler(final Square square) {
+		this.square = square;
+	}
+
+	public static void setGame(final Game thisGame) {
 		game = thisGame;
 	}
-	
+
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		SquareButton button = (SquareButton)e.getSource();
-		game.squareClicked(button.getXPosition(), button.getYPosition());
+	public void actionPerformed(final ActionEvent e) {
+		game.squareClicked(square.getXPositon(), square.getYPosition());
 	}
 }

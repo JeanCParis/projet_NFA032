@@ -5,14 +5,19 @@ import java.awt.event.ActionListener;
 
 public class VehicleClickHandler implements ActionListener {
 	protected static Game game;
-	
-	public static void setGame(Game thisGame) {
+	protected Vehicle vehicle;
+
+	public VehicleClickHandler(final Vehicle vehicle) {
+		this.vehicle = vehicle;
+	}
+
+	public static void setGame(final Game thisGame) {
 		game = thisGame;
 	}
-	
+
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		game.vehicleClicked();
+	public void actionPerformed(final ActionEvent e) {
+		game.vehicleClicked(vehicle);
 	}
 
 }
