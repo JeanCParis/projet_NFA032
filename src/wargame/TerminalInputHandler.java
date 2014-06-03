@@ -5,16 +5,11 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JTextField;
 
-public class TerminalInputHandler implements ActionListener {
-	protected static Game game;
+public class TerminalInputHandler extends MyActionListener {
 	protected JTextField field;
 
 	public TerminalInputHandler(final JTextField field) {
 		this.field = field;
-	}
-
-	public static void setGame(final Game thisGame) {
-		game = thisGame;
 	}
 
 	@Override

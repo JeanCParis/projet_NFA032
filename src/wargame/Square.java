@@ -3,15 +3,16 @@ package wargame;
 import java.util.ArrayList;
 
 public abstract class Square {
-	protected static SquareType type;
+	protected final SquareType type;
 	protected final int xPositon, yPosition;
 
 	protected ArrayList<Vehicle> groundlevelVehicles = new ArrayList<Vehicle>();
 	protected ArrayList<Vehicle> skylevelVehicles = new ArrayList<Vehicle>();
 
-	protected Square(final int xPosition, final int yPosition) {
+	protected Square(final int xPosition, final int yPosition, final SquareType type) {
 		this.xPositon = xPosition;
 		this.yPosition = yPosition;
+		this.type = type;
 	}
 
 	public int getXPositon() {
@@ -22,14 +23,10 @@ public abstract class Square {
 		return yPosition;
 	}
 
-	public static SquareType getType() {
+	public SquareType getType() {
 		return type;
 	}
-
-	public static void setType(final SquareType type) {
-		Square.type = type;
-	}
-
+	
 	public abstract void addVehicleToGroundlevel(Vehicle vehicle)
 			throws IncompatibleVehiculeException, FullException;
 

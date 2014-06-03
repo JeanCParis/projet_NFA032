@@ -2,8 +2,8 @@ package wargame;
 
 public class SeaSquare extends Square {
 
-	public SeaSquare(final int xPosition, final int yPosition) {
-		super(xPosition, yPosition);
+	public SeaSquare(final int xPosition, final int yPosition, final SquareType type) {
+		super(xPosition, yPosition, type);
 	}
 
 	@Override

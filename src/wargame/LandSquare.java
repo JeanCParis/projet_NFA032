@@ -4,8 +4,8 @@ import interfaceGraphique.Terminal;
 
 public class LandSquare extends Square {
 
-	public LandSquare(int xPosition, int yPosition) {
-		super(xPosition, yPosition);
+	public LandSquare(final int xPosition, final int yPosition, final SquareType type) {
+		super(xPosition, yPosition, type);
 	}
 	
 	@Override

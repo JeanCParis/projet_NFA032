@@ -3,8 +3,8 @@ package wargame;
 import java.util.ArrayList;
 
 public class WorldMap {
-	protected int xSize, ySize;
-	protected Square[][] squares;
+	protected final int xSize, ySize;
+	protected final Square[][] squares;
 
 	public WorldMap(final int xSize, final int ySize) {
 		this.xSize = xSize;
@@ -20,10 +20,10 @@ public class WorldMap {
 				for (int j = 0; j < ySize; ++j) {
 					switch (keysTable[i][j]) {
 					case Game.SEA_KEY:
-						squares[i][j] = new SeaSquare(i, j);
+						squares[i][j] = new SeaSquare(i, j, SquareType.SEA);
 						break;
 					case Game.LAND_KEY:
-						squares[i][j] = new LandSquare(i, j);
+						squares[i][j] = new LandSquare(i, j, SquareType.LAND);
 						break;
 					default:
 						throw new RuntimeException();
@@ -39,14 +39,6 @@ public class WorldMap {
 
 	public SquareType getType(final int xPosition, final int yPosition) {
 		return squares[xPosition][yPosition].getType();
-	}
-
-	public void createSeaSquare(final int xPosition, final int yPosition) {
-		squares[xPosition][yPosition] = new SeaSquare(xPosition, yPosition);
-	}
-
-	public void createLandSquare(final int xPosition, final int yPosition) {
-		squares[xPosition][yPosition] = new LandSquare(xPosition, yPosition);
 	}
 
 	public void addVehicleToGroundlevel(final Vehicle Vehicle,
@@ -71,12 +63,12 @@ public class WorldMap {
 		squares[xPosition][yPosition].removeVehicleFromSkylevel(Vehicle);
 	}
 
-	public ArrayList<Vehicle> getGroundlevelVehicules(final int xPosition,
+	public ArrayList<Vehicle> getGroundlevelVehicles(final int xPosition,
 			final int yPosition) {
 		return squares[xPosition][yPosition].getGroundlevelVehicles();
 	}
 
-	public ArrayList<Vehicle> getSkylevelVehicules(final int xPosition,
+	public ArrayList<Vehicle> getSkylevelVehicles(final int xPosition,
 			final int yPosition) {
 		return squares[xPosition][yPosition].getSkylevelVehicles();
 	}

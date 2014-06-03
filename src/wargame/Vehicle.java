@@ -3,7 +3,6 @@ package wargame;
 public abstract class Vehicle {
 	protected VehicleType type;
 	protected int xPosition, yPosition;
-	protected LevelType level;
 
 	public int getXPosition() {
 		return xPosition;
@@ -13,23 +12,13 @@ public abstract class Vehicle {
 		return yPosition;
 	}
 
-	public void moveToPosition(final int xPosition, final int yPosition,
-			final LevelType level) {
+	public void moveToPosition(final int xPosition, final int yPosition) {
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
-		this.level = level;
 	}
 
 	public VehicleType getType() {
 		return type;
-	}
-
-	public LevelType getLevel() {
-		return level;
-	}
-
-	public void setType(final VehicleType type) {
-		this.type = type;
 	}
 
 	@Override

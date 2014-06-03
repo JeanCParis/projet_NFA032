@@ -13,9 +13,12 @@ public class AircraftCarrier extends Vehicle {
 		return aircrafts;
 	}
 
-	public void addAircraft(final Aircraft aircraft) {
+	public void addAircraft(final Aircraft aircraft) throws FullException {
 		if (aircrafts.size() < Game.MAX_AIRCRAFTS_CARRIER) {
 			aircrafts.add(aircraft);
+		}
+		else {
+			throw new FullException();
 		}
 	}
 
@@ -24,12 +27,10 @@ public class AircraftCarrier extends Vehicle {
 	}
 
 	@Override
-	public void moveToPosition(final int xPosition, final int yPosition,
-			final LevelType level) {
-		super.moveToPosition(xPosition, yPosition, level);
+	public void moveToPosition(final int xPosition, final int yPosition) {
+		super.moveToPosition(xPosition, yPosition);
 		for (final Aircraft aircraft : aircrafts) {
-			aircraft.moveToPosition(xPosition, yPosition,
-					LevelType.CARRIER_LEVEL);
+			aircraft.moveToPosition(xPosition, yPosition);
 		}
 	}
 
