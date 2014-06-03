@@ -190,7 +190,7 @@ public class IGPA extends JFrame {
 
 	public void addRightVehicleChoice(final Vehicle vehicle, final int val) {
 		final JButton button = new JButton(images.get(val));
-		button.setBounds(squares[9][0].getX() + 2 * Game.SQUARE_SIZE + 50,
+		button.setBounds(squares[9][0].getX() + 2 * Game.SQUARE_SIZE + 40,
 				squares[9][0].getY() + rightVehicleChoices.size()
 						* Game.SQUARE_SIZE, Game.SQUARE_SIZE, Game.SQUARE_SIZE);
 		button.addActionListener(new VehicleClickHandler(vehicle));

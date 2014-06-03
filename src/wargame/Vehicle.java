@@ -1,7 +1,7 @@
 package wargame;
 
 public abstract class Vehicle {
-	protected static VehicleType type;
+	protected VehicleType type;
 	protected int xPosition, yPosition;
 	protected LevelType level;
 
@@ -20,7 +20,7 @@ public abstract class Vehicle {
 		this.level = level;
 	}
 
-	public static VehicleType getType() {
+	public VehicleType getType() {
 		return type;
 	}
 
@@ -28,8 +28,8 @@ public abstract class Vehicle {
 		return level;
 	}
 
-	public static void setType(final VehicleType type) {
-		Vehicle.type = type;
+	public void setType(final VehicleType type) {
+		this.type = type;
 	}
 
 	@Override

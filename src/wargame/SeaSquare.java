@@ -1,24 +1,21 @@
 package wargame;
 
-import interfaceGraphique.Terminal;
-
 public class SeaSquare extends Square {
 
-	public SeaSquare(int xPosition, int yPosition) {
+	public SeaSquare(final int xPosition, final int yPosition) {
 		super(xPosition, yPosition);
 	}
-	
+
 	@Override
-	public void addVehicleToGroundlevel(Vehicle vehicle) throws IncompatibleVehiculeException, FullException {
-		if(vehicle instanceof AircraftCarrier) {
-			if(groundlevelVehicles.isEmpty()) {
+	public void addVehicleToGroundlevel(final Vehicle vehicle)
+			throws IncompatibleVehiculeException, FullException {
+		if (vehicle.getType() == VehicleType.AIRCRAFT_CARRIER) {
+			if (groundlevelVehicles.isEmpty()) {
 				groundlevelVehicles.add(vehicle);
-			}
-			else {
+			} else {
 				throw new FullException();
 			}
-		}
-		else {
+		} else {
 			throw new IncompatibleVehiculeException(vehicle);
 		}
 	}

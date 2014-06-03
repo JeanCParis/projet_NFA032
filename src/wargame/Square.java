@@ -35,7 +35,7 @@ public abstract class Square {
 
 	public void addVehicleToSkylevel(final Vehicle vehicle)
 			throws IncompatibleVehiculeException, FullException {
-		if (vehicle instanceof Aircraft) {
+		if (vehicle.getType() == VehicleType.AIRCRAFT) {
 			if (skylevelVehicles.size() < Game.MAX_SKYLEVEL_AIRCRAFTS) {
 				skylevelVehicles.add(vehicle);
 			} else {
