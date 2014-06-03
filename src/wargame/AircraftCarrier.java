@@ -28,11 +28,10 @@ public class AircraftCarrier extends Vehicle {
 	}
 
 	@Override
-	public void moveToPosition(final int xPosition, final int yPosition,
-			final LevelType level) {
+	public void moveToPosition(final int xPosition, final int yPosition, final LevelType level) {
 		super.moveToPosition(xPosition, yPosition, level);
 		for (final Aircraft aircraft : aircrafts) {
-			aircraft.moveToPosition(xPosition, yPosition, level);
+			aircraft.moveToPosition(xPosition, yPosition, LevelType.CARRIER_LEVEL);
 		}
 	}
 

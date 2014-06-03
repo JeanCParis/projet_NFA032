@@ -28,7 +28,7 @@ public class Game {
 	protected Army army;
 	protected Vehicle selectedVehicle;
 
-	public void gameInitialisation() {
+	public Game() {
 
 		SquareClickHandler.setGame(this);
 		TerminalInputHandler.setGame(this);
@@ -78,7 +78,7 @@ public class Game {
 		igpa.definirTerrain(map, keysTable);
 	}
 
-	public void playerInitialisation() {
+	public void start() {
 		igpa.writeOnTerminalln("Welcome to Wargame !");
 		igpa.writeOnTerminal("General, please enter your army's name : ");
 		igpa.enableInputFromTerminal();
@@ -86,47 +86,43 @@ public class Game {
 
 	public void squareClicked(final int xPosition, final int yPosition) {
 		switch (currentGameState) {
+		
 		case START:
 			try {
 				final AircraftCarrier carrier = new AircraftCarrier();
 				for (int i = 0; i < MAX_AIRCRAFTS_CARRIER; ++i) {
-					carrier.addAircraft(new Aircraft());
+					carrier.addAircraft(new Aircraft(carrier));
 				}
-				carrier.moveToPosition(xPosition, yPosition,
-						LevelType.GROUND_LEVEL);
+				carrier.moveToPosition(xPosition, yPosition,LevelType.GROUND_LEVEL);
 				army.addVehicle(carrier);
 				map.addVehicleToGroundlevel(carrier, xPosition, yPosition);
 				igpa.modifierCase(xPosition, yPosition, CARRIER_KEY);
 				igpa.reafficher();
-				igpa.writeOnTerminalln("General, you have placed your carrier on position ("
-						+ xPosition + "," + yPosition + ").");
+				igpa.writeOnTerminalln("General, you have placed your carrier on position (" + xPosition + "," + yPosition + ").");
 				igpa.writeOnTerminalln("General, you can now select a vehicle to move on the worldmap.");
 				currentGameState = GameState.INGAME_SELECTING_VEHICLE;
 			} catch (final IncompatibleVehiculeException e) {
-				igpa.writeOnTerminalln("General, the vehicle type "
-						+ e.getVehicle().toString()
-						+ " is incompatible with the selected square.");
+				igpa.writeOnTerminalln("General, the vehicle type " + e.getVehicle().toString() + " is incompatible with the selected square.");
 				igpa.writeOnTerminalln("General, please select another one.");
 			} catch (final FullException e) {
 				igpa.writeOnTerminalln("General, the selected square is already occupied, please select another one.");
 			}
 			break;
+			
 		case INGAME_SELECTING_VEHICLE:
-			List<Vehicle> groundVehicles,
-			skyVehicles;
-			groundVehicles = map.getGroundlevelVehicules(xPosition, yPosition);
-			skyVehicles = map.getSkylevelVehicules(xPosition, yPosition);
+			List<Vehicle> groundVehicles = map.getGroundlevelVehicules(xPosition, yPosition);
+			List<Vehicle> skyVehicles = map.getSkylevelVehicules(xPosition, yPosition);
 			if (groundVehicles.isEmpty() && skyVehicles.isEmpty()) {
 				igpa.writeOnTerminalln("General, the selected square is not occupied by any vehicle.");
-			} else {
+			} 
+			else {
 				currentGameState = GameState.INGAME_SELECTING_VEHICLE_SELECTED;
 				switch (map.getType(xPosition, yPosition)) {
 				case LAND:
 					for (final Vehicle vehicle : groundVehicles) {
 						switch (vehicle.getType()) {
 						case AIRCRAFT:
-							igpa.addRightVehicleChoice(vehicle,
-									AIRCRAFT_LAND_KEY);
+							igpa.addRightVehicleChoice(vehicle, AIRCRAFT_LAND_KEY);
 							break;
 						}
 					}
@@ -135,16 +131,13 @@ public class Game {
 					for (final Vehicle vehicle : groundVehicles) {
 						switch (vehicle.getType()) {
 						case AIRCRAFT:
-							igpa.addRightVehicleChoice(vehicle,
-									AIRCRAFT_WATER_KEY);
+							igpa.addRightVehicleChoice(vehicle, AIRCRAFT_WATER_KEY);
 							break;
 						case AIRCRAFT_CARRIER:
 							igpa.addLeftVehicleChoice(vehicle, CARRIER_KEY);
 							final AircraftCarrier carrier = (AircraftCarrier) vehicle;
-							for (final Vehicle subvehicle : carrier
-									.getAircrafts()) {
-								igpa.addLeftVehicleChoice(vehicle,
-										AIRCRAFT_WATER_KEY);
+							for (final Vehicle subvehicle : carrier.getAircrafts()) {
+								igpa.addLeftVehicleChoice(subvehicle, AIRCRAFT_WATER_KEY);
 							}
 							break;
 						}
@@ -152,49 +145,65 @@ public class Game {
 					break;
 				}
 			}
+			break;
+			
 		case INGAME_SELECTING_VEHICLE_CONFIRMED:
-			if (!(xPosition == selectedVehicle.getXPosition() && yPosition == selectedVehicle
-					.getYPosition())) {
+			int previousXPosition = selectedVehicle.getXPosition();
+			int previousYPosition = selectedVehicle.getYPosition();
+			
+			if (!(xPosition == previousXPosition && yPosition == previousYPosition)) {	
 				switch (selectedVehicle.getLevel()) {
-				case SKY_LEVEL:
+				
+				case CARRIER_LEVEL:
 					try {
-						map.addVehicleToSkylevel(selectedVehicle, xPosition,
-								yPosition);
-						map.removeVehicleFromSkylevel(selectedVehicle,
-								selectedVehicle.getXPosition(),
-								selectedVehicle.getYPosition());
-						selectedVehicle.moveToPosition(xPosition, yPosition,
-								selectedVehicle.getLevel());
+						map.addVehicleToSkylevel(selectedVehicle, xPosition, yPosition);
+						
 						igpa.clearVehicleChoices();
-						switch (selectedVehicle.getType()) {
-						case AIRCRAFT:
-							igpa.modifierCase(xPosition, yPosition,
-									AIRCRAFT_WATER_KEY);
-							break;
-						case AIRCRAFT_CARRIER:
-							igpa.modifierCase(xPosition, yPosition, CARRIER_KEY);
-							break;
-						}
+						igpa.modifierCase(previousXPosition, previousYPosition, determineSquareKey(previousXPosition, previousYPosition));
+						igpa.modifierCase(xPosition, yPosition, determineSquareKey(xPosition, yPosition));
+						selectedVehicle.moveToPosition(xPosition, yPosition, LevelType.SKY_LEVEL);
 					} catch (final FullException e) {
 						igpa.writeOnTerminalln("General, the selected square is already full on the sky level.");
 					} catch (final IncompatibleVehiculeException e) {
 						igpa.writeOnTerminalln("General, the vehicule canot move to this type of square.");
 					}
 					break;
-				case GROUND_LEVEL:
-					try {
-						map.addVehicleToGroundlevel(selectedVehicle, xPosition,
-								yPosition);
-						map.removeVehicleFromGroundlevel(selectedVehicle,
-								selectedVehicle.getXPosition(),
-								selectedVehicle.getYPosition());
-						selectedVehicle.moveToPosition(xPosition, yPosition,
-								selectedVehicle.getLevel());
+				
+				case SKY_LEVEL:
+					try {	
+						map.addVehicleToSkylevel(selectedVehicle, xPosition, yPosition);
+						map.removeVehicleFromSkylevel(selectedVehicle, previousXPosition, previousYPosition);
 						igpa.clearVehicleChoices();
+						igpa.modifierCase(previousXPosition, previousYPosition, determineSquareKey(previousXPosition, previousYPosition));
+						selectedVehicle.moveToPosition(xPosition, yPosition, selectedVehicle.getLevel());
+						
 						switch (selectedVehicle.getType()) {
 						case AIRCRAFT:
-							igpa.modifierCase(xPosition, yPosition,
-									AIRCRAFT_LAND_KEY);
+							igpa.modifierCase(xPosition, yPosition, AIRCRAFT_WATER_KEY);
+							break;
+						case AIRCRAFT_CARRIER:
+							igpa.modifierCase(xPosition, yPosition, CARRIER_KEY);
+							break;
+						}
+
+					} catch (final FullException e) {
+						igpa.writeOnTerminalln("General, the selected square is already full on the sky level.");
+					} catch (final IncompatibleVehiculeException e) {
+						igpa.writeOnTerminalln("General, the vehicule canot move to this type of square.");
+					}
+					break;
+					
+				case GROUND_LEVEL:
+					try {
+						map.addVehicleToGroundlevel(selectedVehicle, xPosition, yPosition);
+						map.removeVehicleFromGroundlevel(selectedVehicle, previousXPosition, previousYPosition);
+						igpa.clearVehicleChoices();
+						igpa.modifierCase(previousXPosition, previousYPosition, determineSquareKey(previousXPosition, previousYPosition));
+						selectedVehicle.moveToPosition(xPosition, yPosition, selectedVehicle.getLevel());
+						
+						switch (selectedVehicle.getType()) {
+						case AIRCRAFT:
+							igpa.modifierCase(xPosition, yPosition, AIRCRAFT_LAND_KEY);
 							break;
 						case AIRCRAFT_CARRIER:
 							igpa.modifierCase(xPosition, yPosition, CARRIER_KEY);
@@ -207,8 +216,56 @@ public class Game {
 					}
 					break;
 				}
-				break;
+				selectedVehicle = null;
+				currentGameState = GameState.INGAME_SELECTING_VEHICLE;
+				igpa.reafficher();
 			}
+			else {
+				igpa.writeOnTerminalln("General, moving a vehicle to it's current location doesn't make sense.");
+			}
+		}
+	}
+	
+	private int determineSquareKey(int xPosition, int yPosition) {
+		List<Vehicle> groundVehicles = map.getGroundlevelVehicules(xPosition, yPosition);
+		List<Vehicle> skyVehicles = map.getSkylevelVehicules(xPosition, yPosition);
+		switch(map.getType(xPosition, yPosition)) {
+		case SEA:
+			if(groundVehicles.isEmpty()){
+				if(skyVehicles.isEmpty()) {
+					return SEA_KEY;
+				}
+				else {
+					if (skyVehicles.size()>1){
+						return AIRCRAFTS_WATER_KEY;
+					}
+					else {
+						return AIRCRAFT_WATER_KEY;
+					}
+				}
+			}
+			else {
+				return CARRIER_KEY;
+			}
+		case LAND:
+			if(groundVehicles.isEmpty()){
+				if(skyVehicles.isEmpty()) {
+					return LAND_KEY;
+				}
+				else {
+					if (skyVehicles.size()>1){
+						return AIRCRAFTS_WATER_KEY;
+					}
+					else {
+						return AIRCRAFT_WATER_KEY;
+					}
+				}
+			}
+			else {
+				return CARRIER_KEY;
+			}
+		default:
+			return 0;
 		}
 	}
 

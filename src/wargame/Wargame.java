@@ -8,7 +8,6 @@ public class Wargame {
 	
 	public static void main(String[] args) {
 		game = new Game();
-		game.gameInitialisation();
-		game.playerInitialisation();
+		game.start();
 	}
 }
