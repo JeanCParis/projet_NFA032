@@ -1,9 +1,13 @@
 package wargame;
 
 public abstract class Vehicle {
-	protected VehicleType type;
+	protected final VehicleType type;
 	protected int xPosition, yPosition;
 
+	protected Vehicle(final VehicleType type) {
+		this.type = type;
+	}
+	
 	public int getXPosition() {
 		return xPosition;
 	}

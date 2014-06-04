@@ -6,8 +6,8 @@ public abstract class Square {
 	protected final SquareType type;
 	protected final int xPositon, yPosition;
 
-	protected ArrayList<Vehicle> groundlevelVehicles = new ArrayList<Vehicle>();
-	protected ArrayList<Vehicle> skylevelVehicles = new ArrayList<Vehicle>();
+	protected final ArrayList<Vehicle> groundlevelVehicles = new ArrayList<Vehicle>();
+	protected final ArrayList<Vehicle> skylevelVehicles = new ArrayList<Vehicle>();
 
 	protected Square(final int xPosition, final int yPosition, final SquareType type) {
 		this.xPositon = xPosition;
@@ -27,11 +27,9 @@ public abstract class Square {
 		return type;
 	}
 	
-	public abstract void addVehicleToGroundlevel(Vehicle vehicle)
-			throws IncompatibleVehiculeException, FullException;
+	public abstract void addVehicleToGroundlevel(Vehicle vehicle) throws IncompatibleVehiculeException, FullException;
 
-	public void addVehicleToSkylevel(final Vehicle vehicle)
-			throws IncompatibleVehiculeException, FullException {
+	public void addVehicleToSkylevel(final Vehicle vehicle) throws IncompatibleVehiculeException, FullException {
 		if (vehicle.getType() == VehicleType.AIRCRAFT) {
 			if (skylevelVehicles.size() < Game.MAX_SKYLEVEL_AIRCRAFTS) {
 				skylevelVehicles.add(vehicle);
@@ -39,7 +37,7 @@ public abstract class Square {
 				throw new FullException();
 			}
 		} else {
-			throw new IncompatibleVehiculeException(vehicle);
+			throw new IncompatibleVehiculeException();
 		}
 	}
 

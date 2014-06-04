@@ -3,14 +3,14 @@ package wargame;
 import java.util.ArrayList;
 
 public class Army {
-	protected String name;
-	protected ArrayList<Vehicle> vehicles = new ArrayList<Vehicle>();
+	protected final String name;
+	protected final ArrayList<Vehicle> vehicles = new ArrayList<Vehicle>();
 	
-	public Army(String name) {
+	public Army(final String name) {
 		this.name = name;
 	}
 	
-	public void addVehicle(Vehicle Vehicle) {
+	public void addVehicle(final Vehicle Vehicle) {
 		vehicles.add(Vehicle);
 	}
 	

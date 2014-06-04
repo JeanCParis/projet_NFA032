@@ -12,9 +12,9 @@ public class WorldMap {
 		squares = new Square[xSize][ySize];
 	}
 
-	public void initialisation(final int[][] keysTable) {
+	public void initialisation(final int[][] keysTable) throws KeyTableSizeException, KeyValueException {
 		if (keysTable.length != xSize || keysTable[0].length != ySize) {
-			throw new RuntimeException();
+			throw new KeyTableSizeException();
 		} else {
 			for (int i = 0; i < xSize; ++i) {
 				for (int j = 0; j < ySize; ++j) {
@@ -26,7 +26,7 @@ public class WorldMap {
 						squares[i][j] = new LandSquare(i, j, SquareType.LAND);
 						break;
 					default:
-						throw new RuntimeException();
+						throw new KeyValueException();
 					}
 				}
 			}

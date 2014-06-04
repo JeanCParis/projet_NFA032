@@ -55,14 +55,14 @@ class SpecialPanel extends JPanel {
 public class IGPA extends JFrame {
 	private final int[][] jeu;
 	private final JButton[][] squares;
-	private List<JButton> leftVehicleChoices;
-	private List<JButton> rightVehicleChoices;
+	private final List<JButton> leftVehicleChoices;
+	private final List<JButton> rightVehicleChoices;
 	private final JButton move, attack, land, takeoff;
 	private final JScrollPane outputTerminalScrollPane;
 	private final JTextArea outputTerminal;
 	private final JTextField inputTerminal;
 	private final HashMap<Integer, ImageIcon> images;
-	private SpecialPanel jpane;
+	private final SpecialPanel jpane;
 
 	public IGPA(final int x, final int y) {
 		jeu = new int[x][y];
@@ -77,30 +77,30 @@ public class IGPA extends JFrame {
 		outputTerminalScrollPane = new JScrollPane(outputTerminal);
 		inputTerminal = new JTextField();
 		images = new HashMap<Integer, ImageIcon>();
+		jpane = new SpecialPanel(jeu, images);
 	}
 
 	public void creerFenetre() {
 		if (!this.isVisible()) {
-			
-			//jpane
 			this.setTitle("Wargame");
 			this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			jpane = new SpecialPanel(jeu, images);
 			this.setContentPane(jpane);
+			this.pack();
+			this.setVisible(true);
+			
+			//jpane
 			jpane.setPreferredSize(new Dimension(jeu.length * Game.SQUARE_SIZE + 48 + 160, jeu[0].length * Game.SQUARE_SIZE + 48 + 150));
 			jpane.setBackground(Color.black);
 			jpane.setLayout(null);
-			this.pack();
-			this.setVisible(true);
 
-			// outputTerminal
+
+			// outputTerminal & outputTerminalScrollPane
 			outputTerminal.setBounds(32, jeu[0].length * Game.SQUARE_SIZE + 48 + 10, jeu.length * Game.SQUARE_SIZE - 20, 150 - 50);
 			outputTerminal.setBackground(new Color(0, 100, 0));
 			outputTerminal.setEditable(false);
 			final DefaultCaret caret = (DefaultCaret) outputTerminal.getCaret();
 			caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);// astuce pour que le dernier string ajouté soit visible
-			
-			// outputTerminalScrollPane
+
 			outputTerminalScrollPane.setBounds(32, jeu[0].length * Game.SQUARE_SIZE + 48 + 10, jeu.length * Game.SQUARE_SIZE - 20, 150 - 50);
 			jpane.add(outputTerminalScrollPane);
 			
@@ -221,15 +221,15 @@ public class IGPA extends JFrame {
 		for (final JButton button : leftVehicleChoices) {
 			jpane.remove(button);
 		}
-		leftVehicleChoices = new ArrayList<JButton>();
+		leftVehicleChoices.clear();
 
 		for (final JButton button : rightVehicleChoices) {
 			jpane.remove(button);
 		}
-		rightVehicleChoices = new ArrayList<JButton>();
+		rightVehicleChoices.clear();
 	}
 	
-	public void addActionChoice(ActionType action) {
+	public void addActionChoice(final ActionType action) {
 		switch(action) {
 		
 		case MOVE:
@@ -258,5 +258,4 @@ public class IGPA extends JFrame {
 	}
 }
 
-class TailleErreur extends RuntimeException {
-}
+class TailleErreur extends RuntimeException {}

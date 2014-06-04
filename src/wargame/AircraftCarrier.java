@@ -3,10 +3,10 @@ package wargame;
 import java.util.ArrayList;
 
 public class AircraftCarrier extends Vehicle {
-	ArrayList<Aircraft> aircrafts = new ArrayList<Aircraft>();
+	final ArrayList<Aircraft> aircrafts = new ArrayList<Aircraft>();
 
 	public AircraftCarrier() {
-		type = VehicleType.AIRCRAFT_CARRIER;
+		super(VehicleType.AIRCRAFT_CARRIER);
 	}
 
 	public ArrayList<Aircraft> getAircrafts() {

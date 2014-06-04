@@ -3,9 +3,14 @@ package wargame;
 public class Aircraft extends Vehicle {
 	protected AircraftCarrier carrier;
 
+	public Aircraft()
+	{
+		super(VehicleType.AIRCRAFT);
+	}
+	
 	public Aircraft(final AircraftCarrier carrier) {
+		this();
 		this.carrier = carrier;
-		type = VehicleType.AIRCRAFT;
 	}
 
 	public AircraftCarrier getCarrier() {

@@ -12,12 +12,11 @@ public class Game {
 	public static final int AIRCRAFTS_LAND_KEY = 100;
 	public static final int AIRCRAFTS_WATER_KEY = 101;
 	public static final int CARRIER_KEY = 20;
-
-	public static final int X_MAP_SIZE = 10;
-	public static final int Y_MAP_SIZE = 10;
 	public static final int SQUARE_SIZE = 48;
 	public static final int BORDER = 24;
 
+	public static final int X_MAP_SIZE = 10;
+	public static final int Y_MAP_SIZE = 10;
 	public static final int MAX_SKYLEVEL_AIRCRAFTS = 5;
 	public static final int MAX_AIRCRAFTS_CARRIER = 5;
 	
@@ -72,7 +71,13 @@ public class Game {
 						SEA_KEY, SEA_KEY, SEA_KEY, SEA_KEY } };
 
 		map = new WorldMap(X_MAP_SIZE, Y_MAP_SIZE);
-		map.initialisation(keysTable);
+		try {
+			map.initialisation(keysTable);
+		} catch(final KeyTableSizeException e) {
+			System.out.print("The table containing the keys is not of the same size as that of the world map.");
+		} catch(final KeyValueException e) {
+			System.out.print("At least one key value is not recognized by the world map.");
+		}
 
 		igpa.definirTerrain(map, keysTable);
 	}
@@ -84,8 +89,8 @@ public class Game {
 	}
 
 	public void squareClicked(final Square square) {
-		int xPosition = square.getXPositon();
-		int yPosition = square.getYPosition();
+		final int xPosition = square.getXPositon();
+		final int yPosition = square.getYPosition();
 		
 		switch (currentGameState) {
 
@@ -100,13 +105,10 @@ public class Game {
 				map.addVehicleToGroundlevel(carrier, xPosition, yPosition);
 				igpa.modifierCase(xPosition, yPosition, CARRIER_KEY);
 				igpa.reafficher();
-				igpa.writeOnTerminalln("General, you have placed your carrier on position ("
-						+ xPosition + "," + yPosition + ").");
 				igpa.writeOnTerminalln("General, please select the square from which you wish to select a vehicule.");
 				currentGameState = GameState.INGAME_SELECTING_VEHICLE;
 			} catch (final IncompatibleVehiculeException e) {
-				igpa.writeOnTerminalln("General, the vehicle type " + e.getVehicle().toString() + " is incompatible with the selected square.");
-				igpa.writeOnTerminalln("General, please select another one.");
+				igpa.writeOnTerminalln("General, you cannot put the carrier on this squarem, please select another one.");
 			} catch (final FullException e) {
 				igpa.writeOnTerminalln("General, the selected square is already occupied, please select another one.");
 			}
@@ -183,13 +185,7 @@ public class Game {
 							igpa.modifierCase(xPosition, yPosition,determineSquareKey(xPosition, yPosition));
 							selectedVehicle.moveToPosition(xPosition, yPosition);
 
-							selectedVehicle = null;
-							selectedAction = null;
-							currentGameState = GameState.INGAME_SELECTING_VEHICLE;
-							
-							igpa.clearVehicleChoices();
-							igpa.clearActionChoices();
-							igpa.reafficher();
+							reset();
 
 						} catch (final FullException e) {
 							igpa.writeOnTerminalln("General, the selected square is already full.");
@@ -204,7 +200,7 @@ public class Game {
 					
 				case LAND:
 					if(calculateDistance(xPosition, yPosition, previousXPosition, previousYPosition)==AIRCRAFT_LANDING_DISTANCE){
-						List<Vehicle> vehicles = map.getGroundlevelVehicles(xPosition, yPosition);			
+						final List<Vehicle> vehicles = map.getGroundlevelVehicles(xPosition, yPosition);			
 						if(vehicles.size() != 0 && vehicles.get(0).getType()==VehicleType.AIRCRAFT_CARRIER) {
 							try {
 								final Aircraft aircraft = (Aircraft)selectedVehicle;
@@ -218,14 +214,9 @@ public class Game {
 								igpa.modifierCase(previousXPosition,previousYPosition,determineSquareKey(previousXPosition,previousYPosition));
 								igpa.modifierCase(xPosition, yPosition,determineSquareKey(xPosition, yPosition));
 	
-								selectedVehicle = null;
-								selectedAction = null;
-								currentGameState = GameState.INGAME_SELECTING_VEHICLE;
+								reset();
 								
-								igpa.clearVehicleChoices();
-								igpa.clearActionChoices();
-								igpa.reafficher();
-							} catch (FullException e) {
+							} catch (final FullException e) {
 								igpa.writeOnTerminalln("General, the aircraft carrier is already full.");
 							}
 						}
@@ -244,16 +235,12 @@ public class Game {
 							square.addVehicleToSkylevel(selectedVehicle);
 							selectedVehicle.moveToPosition(xPosition, yPosition);
 							map.removeVehicleFromSkylevel(selectedVehicle, previousXPosition, previousYPosition);
-
-							selectedVehicle = null;
-							selectedAction = null;
-							currentGameState = GameState.INGAME_SELECTING_VEHICLE;
 							
 							igpa.modifierCase(xPosition, yPosition,determineSquareKey(xPosition, yPosition));
 							igpa.modifierCase(previousXPosition,previousYPosition,determineSquareKey(previousXPosition,previousYPosition));
-							igpa.clearVehicleChoices();
-							igpa.clearActionChoices();
-							igpa.reafficher();
+
+							reset();
+							
 						} catch (final FullException e) {
 							igpa.writeOnTerminalln("General, the selected square is already full.");
 						} catch (final IncompatibleVehiculeException e) {
@@ -283,15 +270,11 @@ public class Game {
 							selectedVehicle.moveToPosition(xPosition, yPosition);
 							map.removeVehicleFromGroundlevel(selectedVehicle, previousXPosition, previousYPosition);
 							
-							selectedVehicle = null;
-							selectedAction = null;
-							currentGameState = GameState.INGAME_SELECTING_VEHICLE;
-							
 							igpa.modifierCase(xPosition, yPosition,determineSquareKey(xPosition, yPosition));
 							igpa.modifierCase(previousXPosition,previousYPosition,determineSquareKey(previousXPosition,previousYPosition));
-							igpa.clearVehicleChoices();
-							igpa.clearActionChoices();
-							igpa.reafficher();
+							
+							reset();
+							
 						} catch (final FullException e) {
 							igpa.writeOnTerminalln("General, the selected square is already full.");
 						} catch (final IncompatibleVehiculeException e) {
@@ -314,10 +297,21 @@ public class Game {
 			}
 		}
 	}
+	
+	private void reset() {
+		selectedVehicle = null;
+		selectedAction = null;
+		currentGameState = GameState.INGAME_SELECTING_VEHICLE;
+		
+		igpa.clearVehicleChoices();
+		igpa.clearActionChoices();
+		igpa.reafficher();
+	}
 
 	private int determineSquareKey(final int xPosition, final int yPosition) {
 		final List<Vehicle> groundVehicles = map.getGroundlevelVehicles(xPosition, yPosition);
 		final List<Vehicle> skyVehicles = map.getSkylevelVehicles(xPosition, yPosition);
+		
 		switch (map.getType(xPosition, yPosition)) {
 		case SEA:
 			if (groundVehicles.isEmpty()) {
@@ -348,11 +342,11 @@ public class Game {
 				return CARRIER_KEY;
 			}
 		default:
-			return 0;
+			return -1;
 		}
 	}
 	
-	private int calculateDistance(int x1, int y1, int x2, int y2) {
+	private int calculateDistance(final int x1, final int y1, final int x2, final int y2) {
 		return Math.abs(x1-x2)+Math.abs(y1-y2);
 	}
 
@@ -361,10 +355,9 @@ public class Game {
 		currentGameState = GameState.INGAME_SELECTING_ACTION;
 		igpa.clearActionChoices();
 		
-		switch(selectedVehicle.getType()) {
-		
+		switch(selectedVehicle.getType()) {	
 		case AIRCRAFT:
-			Aircraft aircraft = (Aircraft)selectedVehicle;
+			final Aircraft aircraft = (Aircraft)selectedVehicle;
 			if(aircraft.getCarrier()!=null) {
 				igpa.addActionChoice(ActionType.TAKE_OFF);
 			}
@@ -381,7 +374,6 @@ public class Game {
 		}
 		
 		igpa.reafficher();
-		igpa.writeOnTerminalln("General, you've selected " + vehicle + " .");
 		igpa.writeOnTerminalln("General, please select an action to perform.");
 	}
 	
@@ -395,10 +387,9 @@ public class Game {
 	public void inputRead(final String string) {
 		switch (currentGameState) {
 		case INITIALIZATION:
+			army = new Army(string);
 			igpa.disableInputFromTerminal();
 			igpa.writeOnTerminalln(" " + string);
-			army = new Army(string);
-
 			igpa.writeOnTerminalln("General, please select the square on which you wish to put your aircraft carrier.");
 			currentGameState = GameState.START;
 			break;

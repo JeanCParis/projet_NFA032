@@ -1,17 +1,16 @@
 package wargame;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class ActionClickHandler extends MyActionListener {
-	protected ActionType action;
+	protected final ActionType action;
 	
-	public ActionClickHandler(ActionType action) {
+	public ActionClickHandler(final ActionType action) {
 		this.action = action;
 	}
 	
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
+	public void actionPerformed(final ActionEvent e) {
 		game.actionClicked(action);
 	} 
 }

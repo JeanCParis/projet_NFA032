@@ -1,7 +1,6 @@
 package wargame;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class SquareClickHandler extends MyActionListener {
 	protected final Square square;

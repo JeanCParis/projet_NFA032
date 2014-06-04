@@ -3,10 +3,9 @@ package wargame;
 import javax.swing.JButton;
 
 public class SquareButton extends JButton {
-	int xPosition, yPosition;
+	protected final int xPosition, yPosition;
 	
-	public SquareButton(int xPosition, int yPosition)  {
-		super();
+	public SquareButton(final int xPosition, final int yPosition)  {
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
 	}
